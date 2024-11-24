@@ -1,0 +1,31 @@
+{
+  "name": "renatus-music",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ffmpeg": "sudo apt-get update && sudo apt-get install -y ffmpeg",
+    "lint": "eslint .",
+    "start": "node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/builders": "^1.9.0",
+    "@discordjs/rest": "^2.4.0",
+    "@discordjs/voice": "^0.18.0",
+    "discord-api-types": "^0.37.107",
+    "discord-hybrid-sharding": "^2.2.3",
+    "discord.js": "^14.16.3",
+    "dotenv": "^16.4.5",
+    "puppeteer": "^23.9.0",
+    "soundcloud.ts": "^0.6.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "eslint": "^9.15.0",
+    "globals": "^15.12.0"
+  }
+}
