@@ -20,6 +20,9 @@
     "discord-hybrid-sharding": "^2.2.3",
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "i18next": "^24.0.0",
+    "mongoose": "^8.8.2",
     "puppeteer": "^23.9.0",
     "soundcloud.ts": "^0.6.2"
   },
