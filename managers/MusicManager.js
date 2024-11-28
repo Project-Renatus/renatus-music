@@ -192,7 +192,7 @@ class MusicManager {
     serverQueue.connection.destroy();
     this.queues.delete(interaction.guild.id);
 
-    interaction.reply(t('stopped', { lng }));
+    interaction.followUp(t('stopped', { lng }));
   }
 
   async pause(interaction) {

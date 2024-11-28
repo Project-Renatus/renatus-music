@@ -24,7 +24,8 @@
     "i18next": "^24.0.0",
     "mongoose": "^8.8.2",
     "puppeteer": "^23.9.0",
-    "soundcloud.ts": "^0.6.2"
+    "soundcloud.ts": "^0.6.2",
+    "url-regex-safe": "^4.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

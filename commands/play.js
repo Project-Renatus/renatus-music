@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, ActionRowBuilder, StringSelectMenuBuilder, EmbedBuilder } = require('discord.js');
 const Soundcloud = require('soundcloud.ts').default;
 const { t } = require('i18next');
+const urlRegex = require('url-regex-safe'); 
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -30,6 +31,16 @@ module.exports = {
     const soundcloud = new Soundcloud(process.env.CLIENT_ID, process.env.OAUTH_TOKEN);
 
     try {
+      if (urlRegex({ exact: true, strict: false }).test(query)) {
+        // If query is a URL, handle it as a track or playlist URL
+        const track = await this.handleUrl(query, soundcloud, interaction, lng);
+        if (track) {
+          await interaction.followUp(`Playing: ${track.title}`);
+          return;
+        }
+      }
+
+      // Fallback to search if not a URL
       const searchResults = await soundcloud.tracks.search({ q: query });
 
       if (searchResults.collection.length === 0) {
@@ -44,7 +55,7 @@ module.exports = {
           value: track.permalink_url.slice(0, 100),
         };
       });
-      
+
       const selectMenu = new StringSelectMenuBuilder()
         .setCustomId('select-track')
         .setPlaceholder(t('selectTrack', { lng }))
@@ -63,5 +74,27 @@ module.exports = {
       console.error(error);
       await interaction.editReply(t('playErr', { lng }));
     }
+  },
+
+  async handleUrl(url, soundcloud, interaction, lng) {
+    try {
+      if (url.includes('/sets/')) {
+        // Handle playlist
+        const playlist = await soundcloud.playlists.getAlt(url);
+        for (const track of playlist.tracks) {
+          await interaction.client.musicManager.playSongFromStream(interaction, track, await soundcloud.util.streamTrack(track.permalink_url));
+          interaction.followUp(`${track.title} has been added to the queue.`);
+        }
+        return playlist.tracks[0];
+      } else {
+        const track = await soundcloud.tracks.getAlt(url);
+        await interaction.client.musicManager.playSongFromStream(interaction, track, await soundcloud.util.streamTrack(track.permalink_url));
+        return track;
+      }
+    } catch (error) {
+      console.error(error);
+      interaction.followUp(t('playErr', { lng }));
+    }
+    return null;
   }
 };
